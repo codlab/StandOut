@@ -3,7 +3,7 @@ package wei.mark.standout.ui;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import wei.mark.standout.R;
+import wei.mark.example.R;
 import wei.mark.standout.StandOutWindow;
 import wei.mark.standout.StandOutWindow.StandOutLayoutParams;
 import wei.mark.standout.Utils;

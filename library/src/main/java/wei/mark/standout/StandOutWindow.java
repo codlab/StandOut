@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import wei.mark.example.R;
 import wei.mark.standout.constants.StandOutFlags;
 import wei.mark.standout.ui.Window;
 import android.app.Notification;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Extend this class to easily create and manage floating StandOut windows.
@@ -378,6 +380,7 @@ public abstract class StandOutWindow extends Service {
 			}
 
 			if (ACTION_SHOW.equals(action) || ACTION_RESTORE.equals(action)) {
+                Log.d("POPUP","show 3");
 				show(id);
 			} else if (ACTION_HIDE.equals(action)) {
 				hide(id);
@@ -1067,6 +1070,7 @@ public abstract class StandOutWindow extends Service {
 	 * @return The window shown.
 	 */
 	public final synchronized Window show(int id) {
+        Log.d("POPUP", "show "+id);
 		// get the window corresponding to the id
 		Window cachedWindow = getWindow(id);
 		final Window window;
@@ -1108,7 +1112,7 @@ public abstract class StandOutWindow extends Service {
 				window.getChildAt(0).startAnimation(animation);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+            ex.printStackTrace();
 		}
 
 		// add view to internal map
@@ -1162,8 +1166,9 @@ public abstract class StandOutWindow extends Service {
 		final Window window = getWindow(id);
 
 		if (window == null) {
-			throw new IllegalArgumentException("Tried to hide(" + id
-					+ ") a null window.");
+			//throw new IllegalArgumentException("Tried to hide(" + id
+			//		+ ") a null window.");
+            return;
 		}
 
 		// alert callbacks and cancel if instructed
@@ -1241,8 +1246,9 @@ public abstract class StandOutWindow extends Service {
 		final Window window = getWindow(id);
 
 		if (window == null) {
-			throw new IllegalArgumentException("Tried to close(" + id
-					+ ") a null window.");
+			//throw new IllegalArgumentException("Tried to close(" + id
+			//		+ ") a null window.");
+            return;
 		}
 
 		if (window.visibility == Window.VISIBILITY_TRANSITION) {
@@ -1846,8 +1852,14 @@ public abstract class StandOutWindow extends Service {
 		 */
 		public StandOutLayoutParams(int id, int w, int h) {
 			this(id);
+
+            Display display = mWindowManager.getDefaultDisplay();
 			width = w;
+            if(width < 0)
+                width = display.getWidth();
 			height = h;
+            if(height < 0)
+                height = display.getHeight();
 		}
 
 		/**
@@ -1872,9 +1884,6 @@ public abstract class StandOutWindow extends Service {
 				y = ypos;
 			}
 
-			Display display = mWindowManager.getDefaultDisplay();
-			int width = display.getWidth();
-			int height = display.getHeight();
 
 			if (x == RIGHT) {
 				x = width - w;
