@@ -50,6 +50,13 @@ import android.widget.Toast;
 public abstract class StandOutWindow extends Service {
 	static final String TAG = "StandOutWindow";
 
+
+
+    /**
+     * StandOut notification show state: default true to prevent kill of service
+     */
+    private static boolean shouldStartNotification = true;
+
 	/**
 	 * StandOut window id: You may use this sample id for your first window.
 	 */
@@ -1127,17 +1134,20 @@ public abstract class StandOutWindow extends Service {
 					| Notification.FLAG_NO_CLEAR;
 
 			// only show notification if not shown before
-			if (!startedForeground) {
-				// tell Android system to show notification
-				startForeground(
-						getClass().hashCode() + ONGOING_NOTIFICATION_ID,
-						notification);
-				startedForeground = true;
-			} else {
-				// update notification if shown before
-				mNotificationManager.notify(getClass().hashCode()
-						+ ONGOING_NOTIFICATION_ID, notification);
-			}
+
+            if(shouldStartNotification) {
+                if (!startedForeground) {
+                    // tell Android system to show notification
+                    startForeground(
+                            getClass().hashCode() + ONGOING_NOTIFICATION_ID,
+                            notification);
+                    startedForeground = true;
+                } else {
+                    // update notification if shown before
+                    mNotificationManager.notify(getClass().hashCode()
+                            + ONGOING_NOTIFICATION_ID, notification);
+                }
+            }
 		} else {
 			// notification can only be null if it was provided before
 			if (!startedForeground) {
@@ -2004,4 +2014,8 @@ public abstract class StandOutWindow extends Service {
 			return description;
 		}
 	}
+
+    public static void setShouldStartNotification(boolean state) {
+        shouldStartNotification = state;
+    }
 }
