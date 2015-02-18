@@ -1236,8 +1236,10 @@ public abstract class StandOutWindow extends Service {
 					| Notification.FLAG_NO_CLEAR
 					| Notification.FLAG_AUTO_CANCEL;
 
-			mNotificationManager.notify(getClass().hashCode() + id,
-					notification);
+            if(shouldStartNotification) {
+                mNotificationManager.notify(getClass().hashCode() + id,
+                        notification);
+            }
 
 		} else {
 			// if hide not enabled, close window
